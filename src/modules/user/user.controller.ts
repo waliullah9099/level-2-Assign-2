@@ -151,6 +151,30 @@ const getAllOrderSingleUser = async (req: Request, res: Response) => {
   }
 };
 
+// Calculate Total Price of Orders for a Specific User
+const calculateTotalPrice = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const totalPrice =
+      await userServices.calculateTotalPriceSpecificUser(userId);
+    res.status(200).json({
+      success: true,
+      message: 'Total price calculated successfully!',
+      data: { totalPrice },
+    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    res.status(404).json({
+      success: false,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    });
+  }
+};
+
 export const userController = {
   createUser,
   getUsers,
@@ -158,4 +182,5 @@ export const userController = {
   updateSingleUser,
   deleteSingleUser,
   getAllOrderSingleUser,
+  calculateTotalPrice,
 };

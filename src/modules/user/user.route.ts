@@ -28,10 +28,10 @@ router.put('/users/:userId/orders', userController.deleteSingleUser);
 // get all order from a specific user
 router.get('/users/:userId/orders', userController.getAllOrderSingleUser);
 
-// get total price
+// Calculate Total Price of Orders for a Specific User
 router.get(
   '/users/:userId/orders/total-price',
-  userController.deleteSingleUser,
+  userController.calculateTotalPrice,
 );
 
 export const userRouter = router;
