@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import UserValidationSchema from './user.validation';
 import { userServices } from './user.service';
 
+// ========== User Related Api ===========
+
 // create a user
 const createUser = async (req: Request, res: Response) => {
   try {
@@ -99,7 +101,7 @@ const updateSingleUser = async (req: Request, res: Response) => {
   }
 };
 
-// delete single user
+//  delete single user
 const deleteSingleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -124,10 +126,36 @@ const deleteSingleUser = async (req: Request, res: Response) => {
   }
 };
 
+// ========== Order Related Api ===========
+
+// get all order from a specific user
+const getAllOrderSingleUser = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const result = await userServices.getAllOrderSingleUserFromDb(userId);
+    res.status(200).json({
+      success: true,
+      message: 'Order fetched successfully!',
+      data: result,
+    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    res.status(404).json({
+      success: false,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    });
+  }
+};
+
 export const userController = {
   createUser,
   getUsers,
   getSingleUser,
   updateSingleUser,
   deleteSingleUser,
+  getAllOrderSingleUser,
 };

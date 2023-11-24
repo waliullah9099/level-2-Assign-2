@@ -1,6 +1,7 @@
 import { User } from '../user.model';
 import { TUser } from './user.interface';
 
+// ========== User Related Api ===========
 // create a user
 const createUserFromDb = async (userData: TUser) => {
   const result = await User.create(userData);
@@ -54,10 +55,23 @@ const deleteSingleUserFromDb = async (userId: number | string) => {
   return result;
 };
 
+// ========== Order Related Api ===========
+
+//  get all order from a specif
+const getAllOrderSingleUserFromDb = async (userId: number | string) => {
+  const userExists = await User.isUserExists(userId);
+  if (!userExists) {
+    throw new Error('User not found');
+  }
+  const result = await User.findOne({ userId }).select({ orders: 1, _id: 0 });
+  return result;
+};
+
 export const userServices = {
   createUserFromDb,
   getUsersFromDb,
   getSingleUserFromDb,
   updateUserFromDb,
   deleteSingleUserFromDb,
+  getAllOrderSingleUserFromDb,
 };
