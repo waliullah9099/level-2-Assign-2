@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { TUser } from './user/user.interface';
+import { TUser, UserModel } from './user/user.interface';
 import bcrypt from 'bcrypt';
 import config from '../app/config';
 
@@ -46,4 +46,9 @@ userSchema.post('save', async function (doc, next) {
   next();
 });
 
-export const User = model<TUser>('User', userSchema);
+userSchema.statics.isUserExists = async function (userId: number | string) {
+  const existingUser = await User.findOne({ userId });
+  return existingUser;
+};
+
+export const User = model<TUser, UserModel>('User', userSchema);
