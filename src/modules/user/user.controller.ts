@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import UserValidationSchema from './user.validation';
 import { userServices } from './user.service';
 
+// create a user
 const createUser = async (req: Request, res: Response) => {
   try {
     const { user: userData } = req.body;
@@ -27,6 +28,7 @@ const createUser = async (req: Request, res: Response) => {
   }
 };
 
+// get users
 const getUsers = async (req: Request, res: Response) => {
   try {
     const result = await userServices.getUsersFromDb();
@@ -49,6 +51,7 @@ const getUsers = async (req: Request, res: Response) => {
   }
 };
 
+// get single user
 const getSingleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -71,6 +74,7 @@ const getSingleUser = async (req: Request, res: Response) => {
   }
 };
 
+// update single user
 const updateSingleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -94,9 +98,36 @@ const updateSingleUser = async (req: Request, res: Response) => {
     });
   }
 };
+
+// delete single user
+const deleteSingleUser = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const result = await userServices.deleteSingleUserFromDb(userId);
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: 'User deleted successfully!',
+        data: null,
+      });
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    res.status(404).json({
+      success: false,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    });
+  }
+};
+
 export const userController = {
   createUser,
   getUsers,
   getSingleUser,
   updateSingleUser,
+  deleteSingleUser,
 };
