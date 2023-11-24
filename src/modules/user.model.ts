@@ -40,6 +40,13 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+// delete password field when response
+userSchema.methods.toJSON = function () {
+  const obj = this.toObject();
+  delete obj.password;
+  return obj;
+};
+
 // post save hook
 userSchema.post('save', async function (doc, next) {
   doc.password = '';

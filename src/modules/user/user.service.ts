@@ -27,8 +27,21 @@ const getSingleUserFromDb = async (userId: number | string) => {
   return result;
 };
 
+const updateUserFromDb = async (userId: number | string, userData: object) => {
+  const userExists = await User.isUserExists(userId);
+  if (!userExists) {
+    throw new Error('User not found');
+  }
+  const result = await User.findOneAndUpdate(
+    { userId },
+    { $set: userData, new: true, runValidators: true },
+  ).select({ password: 0 });
+
+  return result;
+};
 export const userServices = {
   createUserFromDb,
   getUsersFromDb,
   getSingleUserFromDb,
+  updateUserFromDb,
 };
