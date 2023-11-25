@@ -28,4 +28,10 @@ const UserValidationSchema = z.object({
     .optional(),
 });
 
-export default UserValidationSchema;
+const orderSchema = z.object({
+  productName: z.string(),
+  price: z.number().nonnegative(),
+  quantity: z.number().positive(),
+});
+
+export const userZodSchema = { UserValidationSchema, orderSchema };

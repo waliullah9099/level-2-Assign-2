@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import UserValidationSchema from './user.validation';
 import { userServices } from './user.service';
+import { userZodSchema } from './user.validation';
 
 // ========== User Related Api ===========
 
@@ -9,7 +9,7 @@ const createUser = async (req: Request, res: Response) => {
   try {
     const { user: userData } = req.body;
 
-    const zodParseSchema = UserValidationSchema.parse(userData);
+    const zodParseSchema = userZodSchema.UserValidationSchema.parse(userData);
     const result = await userServices.createUserFromDb(zodParseSchema);
     res.status(200).json({
       success: true,
@@ -133,12 +133,18 @@ const addOrdersToUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
     const order = req.body;
-    const result = await userServices.addOrdersToUserFromDb(userId, order);
-    res.status(200).json({
-      success: true,
-      message: 'Order created successfully!',
-      data: result.orders,
-    });
+    const zorOrdersParse = userZodSchema.orderSchema.parse(order);
+    const result = await userServices.addOrdersToUserFromDb(
+      userId,
+      zorOrdersParse,
+    );
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: 'Order created successfully!',
+        data: null,
+      });
+    }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     res.status(404).json({
