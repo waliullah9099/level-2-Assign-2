@@ -16,27 +16,30 @@ const userSchema = new Schema<TUser>({
   },
   password: { type: String, required: [true, 'password is required'] },
   fullName: {
-    firstName: { type: String, required: [true, 'first name id is required'] },
-    lastName: { type: String, required: [true, 'last name id is required'] },
+    firstName: { type: String, required: [true, 'first name is required'] },
+    lastName: { type: String, required: [true, 'last name is required'] },
   },
-  age: { type: Number },
+  age: { type: Number, required: [true, 'age is required'] },
   email: {
     type: String,
-    required: [true, 'email id is required'],
+    required: [true, 'email is required'],
     unique: true,
   },
-  isActive: { type: Boolean },
-  hobbies: [{ type: String, required: [true, 'hobbies id is required'] }],
+  isActive: { type: Boolean, required: [true, 'active status is required'] },
+  hobbies: [{ type: String, required: [true, 'hobbies is required'] }],
   address: {
-    street: { type: String },
-    city: { type: String },
-    country: { type: String },
+    street: { type: String, required: [true, 'street is required'] },
+    city: { type: String, required: [true, 'city is required'] },
+    country: { type: String, required: [true, 'country is required'] },
   },
   orders: [
     {
-      productName: { type: String },
-      price: { type: Number },
-      quantity: { type: Number },
+      productName: {
+        type: String,
+        required: [true, 'product name is required'],
+      },
+      price: { type: Number, required: [true, 'price is required'] },
+      quantity: { type: Number, required: [true, 'quantity is required'] },
     },
   ],
 });
