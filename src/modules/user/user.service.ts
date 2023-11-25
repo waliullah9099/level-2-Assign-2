@@ -57,6 +57,30 @@ const deleteSingleUserFromDb = async (userId: number | string) => {
 
 // ========== Order Related Api ===========
 
+// Add New Product in Order if orders doesn't exists
+const addOrdersToUserFromDb = async (
+  userId: number | string,
+  OrderData: {
+    productName: string;
+    price: number;
+    quantity: number;
+  },
+) => {
+  const userExists = await User.isUserExists(userId);
+  if (!userExists) {
+    throw new Error('User not found');
+  }
+
+  const { productName, price, quantity } = OrderData;
+
+  const result = await User.findOneAndUpdate(
+    { userId, orders: { $exists: true } },
+    { $push: { orders: { productName, price, quantity } } },
+    { upsert: true, new: true },
+  );
+  return result;
+};
+
 //  get all order from a specif
 const getAllOrderSingleUserFromDb = async (userId: number | string) => {
   const userExists = await User.isUserExists(userId);
@@ -89,6 +113,7 @@ export const userServices = {
   getUsersFromDb,
   getSingleUserFromDb,
   updateUserFromDb,
+  addOrdersToUserFromDb,
   deleteSingleUserFromDb,
   getAllOrderSingleUserFromDb,
   calculateTotalPriceSpecificUser,

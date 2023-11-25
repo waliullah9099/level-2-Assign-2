@@ -23,7 +23,7 @@ router.delete('/users/:userId', userController.deleteSingleUser);
 // ========== Order Related Api ===========
 
 // put order
-router.put('/users/:userId/orders', userController.deleteSingleUser);
+router.put('/users/:userId/orders', userController.addOrdersToUser);
 
 // get all order from a specific user
 router.get('/users/:userId/orders', userController.getAllOrderSingleUser);

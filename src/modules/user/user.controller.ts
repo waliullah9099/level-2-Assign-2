@@ -128,6 +128,31 @@ const deleteSingleUser = async (req: Request, res: Response) => {
 
 // ========== Order Related Api ===========
 
+// Add New Product in Order if orders doesn't exists
+const addOrdersToUser = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const order = req.body;
+    const result = await userServices.addOrdersToUserFromDb(userId, order);
+    res.status(200).json({
+      success: true,
+      message: 'Order created successfully!',
+      data: result.orders,
+    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    res.status(404).json({
+      success: false,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+        err: err.error,
+      },
+    });
+  }
+};
+
 // get all order from a specific user
 const getAllOrderSingleUser = async (req: Request, res: Response) => {
   try {
@@ -181,6 +206,7 @@ export const userController = {
   getSingleUser,
   updateSingleUser,
   deleteSingleUser,
+  addOrdersToUser,
   getAllOrderSingleUser,
   calculateTotalPrice,
 };
